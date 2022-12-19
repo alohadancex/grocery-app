@@ -13,7 +13,9 @@ let editId = ''
 
 //event linsteners
 form.addEventListener('submit', addItem)
+clearBtn.addEventListener('click', clearItems)
 
+// add item
 function addItem(e) {
 	e.preventDefault()
 	const value = grocery.value
@@ -21,39 +23,43 @@ function addItem(e) {
 
 	if (value && !editFlag) {
 		const element = document.createElement('article')
-		element.classList.add('grocery-item')
-		const attr = document.createAttribute('data-id')
+		let attr = document.createAttribute('data-id')
 		attr.value = id
 		element.setAttributeNode(attr)
+		element.classList.add('grocery-item')
 		element.innerHTML = `<p class="title">${value}</p>
-					<div class="btn-container">
-						<button type="button" class='edit-btn'>
-							<i class="fas fa-edit"></i>
-						</button>
-						<button type="button" class='delete-btn'>
-							<i class="fas fa-trash"></i>
-						</button>
-					</div>`
-		// append element
+            <div class="btn-container">
+              <!-- edit btn -->
+              <button type="button" class="edit-btn">
+                <i class="fas fa-edit"></i>
+              </button>
+              <!-- delete btn -->
+              <button type="button" class="delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `
+		// append child
 		list.appendChild(element)
-		//remove display alert
+		// display alert
 		displayAlert('item added to the list', 'success')
-		// add to container
+		// show container
 		container.classList.add('show-container')
-		//add to Local storage
+		// set local storage
 		addToLocalStorage(id, value)
 		// set back to default
 		setBackToDefault()
 	} else if (value && editFlag) {
-		console.log('editing')
+		displayAlert('value changed', 'success')
+		// edit  local storage
 	} else {
-		displayAlert('please text your message', 'danger')
+		displayAlert('please enter value', 'danger')
 	}
-	grocery.value = ''
 }
+// add item
 
 // display alert
-function displayAlert(text, action, value) {
+function displayAlert(text, action) {
 	alert.classList.add(`alert-${action}`)
 	alert.textContent = text
 
@@ -63,13 +69,34 @@ function displayAlert(text, action, value) {
 		alert.textContent = ''
 	}, 1000)
 }
+// display alert
+
+// clear items
+function clearItems() {
+	const items = document.querySelectorAll('.grocery-item')
+	if (items.length > 0) {
+		items.forEach(function (item) {
+			list.removeChild(item)
+		})
+	}
+	container.classList.remove('show-container')
+	displayAlert('empty list', 'danger')
+	setBackToDefault()
+	// localStorage.remove('list')
+}
+// clear items
 
 // set back to default
 function setBackToDefault() {
-	console.log('set back to default')
+	grocery.value = ''
+	editFlag = false
+	editId = ''
+	submitBtn.textContent = 'submit'
 }
+// set back to default
 
 // local storage
 function addToLocalStorage(id, value) {
-	console.log('added to local storage')
+	console.log('added to local storagre')
 }
+// local storage
