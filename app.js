@@ -56,6 +56,10 @@ function addItem(e) {
 		// setBackToDefaul
 		setBackToDefault()
 	} else if (value && editFlag) {
+		editElement.innerHTML = value
+		displayAlert('value changed', 'success')
+		// edit local storage
+		editToLocalStorage(id)
 		setBackToDefault()
 	} else {
 		displayAlert('please enter the value', 'danger')
@@ -91,15 +95,10 @@ function clearItems() {
 }
 // clear items
 
-// edit function
-function editItems(e) {
-	console.log('edit')
-}
-// edit function
-
 // delete function
 function deleteItems(e) {
 	const element = e.currentTarget.parentElement.parentElement
+	const id = element.dataset.id
 	list.removeChild(element)
 	if (list.children.length === 0) {
 		container.classList.remove('show-container')
@@ -107,9 +106,22 @@ function deleteItems(e) {
 	displayAlert('item remove from list', 'success')
 	setBackToDefault()
 	// remove from local storage
-	removeFromLocalStorage(id)
+	// removeFromLocalStorage(id)
 }
 // delete function
+
+// edit function
+function editItems(e) {
+	const element = e.currentTarget.parentElement.parentElement
+	// set edit item
+	editElement = e.currentTarget.parentElement.previousElementSibling
+	// set form value
+	grocery.value = editElement.innerHTML
+	editFlag = true
+	editId = element.dataset.id
+	submitBtn.textContent = 'edit'
+}
+// edit function
 
 // set back to default
 function setBackToDefault() {
@@ -129,3 +141,6 @@ function addToLocalStorage(id, value) {
 // remove from local storage
 function removeFromLocalStorage(id) {}
 // remove from local storage
+
+// edit to local storage
+function editToLocalStorage() {}
