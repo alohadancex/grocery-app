@@ -19,7 +19,7 @@ clearBtn.addEventListener('click', clearItems)
 function addItem(e) {
 	e.preventDefault()
 
-	const value = grocery.value
+	const value = grocery.value.trim()
 	const id = new Date().getTime().toString()
 
 	if (value !== '' && !editFlag) {
@@ -59,7 +59,7 @@ function addItem(e) {
 		editElement.innerHTML = value
 		displayAlert('value changed', 'success')
 		// edit local storage
-		editToLocalStorage(id)
+		editToLocalStorage(editId, value)
 		setBackToDefault()
 	} else {
 		displayAlert('please enter the value', 'danger')
@@ -100,13 +100,14 @@ function deleteItems(e) {
 	const element = e.currentTarget.parentElement.parentElement
 	const id = element.dataset.id
 	list.removeChild(element)
-	if (list.children.length === 0) {
+
+	if (element.children.lenght === 0) {
 		container.classList.remove('show-container')
+		setBackToDefault()
 	}
-	displayAlert('item remove from list', 'success')
-	setBackToDefault()
+	displayAlert('item removed from list', 'danger')
 	// remove from local storage
-	// removeFromLocalStorage(id)
+	removeFromLocalStorage(id)
 }
 // delete function
 
@@ -115,11 +116,11 @@ function editItems(e) {
 	const element = e.currentTarget.parentElement.parentElement
 	// set edit item
 	editElement = e.currentTarget.parentElement.previousElementSibling
-	// set form value
+	//set form value
 	grocery.value = editElement.innerHTML
 	editFlag = true
 	editId = element.dataset.id
-	submitBtn.textContent = 'edit'
+	submitBtn.textContent = 'Edit'
 }
 // edit function
 
@@ -134,13 +135,38 @@ function setBackToDefault() {
 
 // local storage
 function addToLocalStorage(id, value) {
-	console.log('add to local storage')
+	const grocery = {
+		id: id,
+		value: value,
+	}
+
+	let items = getLocalStorage()
+	items.push(grocery)
+	localStorage.setItem('list', JSON.stringify(items))
 }
 // local storage
 
 // remove from local storage
-function removeFromLocalStorage(id) {}
+function removeFromLocalStorage(id) {
+	let items = getLocalStorage()
+
+	items = items.filter(item => {
+		if (item.id !== id) {
+			return item
+		}
+	})
+	localStorage.setItem('list', JSON.stringify(items))
+}
 // remove from local storage
 
 // edit to local storage
-function editToLocalStorage() {}
+function editToLocalStorage(id, value) {}
+// edit to local storage
+
+// get local storage
+function getLocalStorage() {
+	return localStorage.getItem('list')
+		? JSON.parse(localStorage.getItem('list'))
+		: []
+}
+// get local storage
