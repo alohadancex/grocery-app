@@ -92,11 +92,23 @@ function clearItems() {
 // clear items
 
 // edit function
-function editItems() {}
+function editItems(e) {
+	console.log('edit')
+}
 // edit function
 
 // delete function
-function deleteItems() {}
+function deleteItems(e) {
+	const element = e.currentTarget.parentElement.parentElement
+	list.removeChild(element)
+	if (list.children.length === 0) {
+		container.classList.remove('show-container')
+	}
+	displayAlert('item remove from list', 'success')
+	setBackToDefault()
+	// remove from local storage
+	removeFromLocalStorage(id)
+}
 // delete function
 
 // set back to default
@@ -113,3 +125,7 @@ function addToLocalStorage(id, value) {
 	console.log('add to local storage')
 }
 // local storage
+
+// remove from local storage
+function removeFromLocalStorage(id) {}
+// remove from local storage
