@@ -15,9 +15,6 @@ let editId = ''
 form.addEventListener('submit', addItem)
 clearBtn.addEventListener('click', clearItems)
 
-const deleteBtn = document.querySelector('.delete-btn')
-const editBtn = document.querySelector('.edit-btn')
-
 // add item
 function addItem(e) {
 	e.preventDefault()
@@ -43,6 +40,11 @@ function addItem(e) {
               </button>
             </div>
           `
+		// buttons
+		const deleteBtn = element.querySelector('.delete-btn')
+		const editBtn = element.querySelector('.edit-btn')
+		deleteBtn.addEventListener('click', deleteItems)
+		editBtn.addEventListener('click', editItems)
 		// apend child
 		list.appendChild(element)
 		// show container
@@ -88,6 +90,14 @@ function clearItems() {
 	// localStorage.remove(id, value)
 }
 // clear items
+
+// edit function
+function editItems() {}
+// edit function
+
+// delete function
+function deleteItems() {}
+// delete function
 
 // set back to default
 function setBackToDefault() {
