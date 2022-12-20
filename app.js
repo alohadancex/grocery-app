@@ -15,15 +15,19 @@ let editId = ''
 form.addEventListener('submit', addItem)
 clearBtn.addEventListener('click', clearItems)
 
+const deleteBtn = document.querySelector('.delete-btn')
+const editBtn = document.querySelector('.edit-btn')
+
 // add item
 function addItem(e) {
 	e.preventDefault()
+
 	const value = grocery.value
 	const id = new Date().getTime().toString()
 
-	if (value && !editFlag) {
-		const element = document.createElement('article')
-		let attr = document.createAttribute('data-id')
+	if (value !== '' && !editFlag) {
+		const element = document.createElement('arcticle')
+		const attr = document.createAttribute('data-id')
 		attr.value = id
 		element.setAttributeNode(attr)
 		element.classList.add('grocery-item')
@@ -39,37 +43,36 @@ function addItem(e) {
               </button>
             </div>
           `
-		// append child
+		// apend child
 		list.appendChild(element)
-		// display alert
-		displayAlert('item added to the list', 'success')
 		// show container
 		container.classList.add('show-container')
-		// set local storage
+		// display success
+		displayAlert('added on list', 'success')
+		// addToLocalStorage
 		addToLocalStorage(id, value)
-		// set back to default
+		// setBackToDefaul
 		setBackToDefault()
 	} else if (value && editFlag) {
-		displayAlert('value changed', 'success')
-		// edit  local storage
+		setBackToDefault()
 	} else {
-		displayAlert('please enter value', 'danger')
+		displayAlert('please enter the value', 'danger')
 	}
 }
 // add item
 
-// display alert
+// change display alert
 function displayAlert(text, action) {
 	alert.classList.add(`alert-${action}`)
 	alert.textContent = text
 
-	// change display alert
+	// remove alert
 	setTimeout(() => {
 		alert.classList.remove(`alert-${action}`)
 		alert.textContent = ''
 	}, 1000)
 }
-// display alert
+// change display alert
 
 // clear items
 function clearItems() {
@@ -82,7 +85,7 @@ function clearItems() {
 	container.classList.remove('show-container')
 	displayAlert('empty list', 'danger')
 	setBackToDefault()
-	// localStorage.remove('list')
+	// localStorage.remove(id, value)
 }
 // clear items
 
@@ -97,6 +100,6 @@ function setBackToDefault() {
 
 // local storage
 function addToLocalStorage(id, value) {
-	console.log('added to local storagre')
+	console.log('add to local storage')
 }
 // local storage
