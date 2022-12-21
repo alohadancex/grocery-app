@@ -14,6 +14,7 @@ let editId = ''
 //event linsteners
 form.addEventListener('submit', addItem)
 clearBtn.addEventListener('click', clearItems)
+window.addEventListener('DOMContentLoaded', setUpItems)
 
 // add item
 function addItem(e) {
@@ -22,30 +23,7 @@ function addItem(e) {
 	const id = new Date().getTime().toString()
 
 	if (value && !editFlag) {
-		const element = document.createElement('arcticle')
-		const attr = document.createAttribute('data-id')
-		attr.value = id
-		element.setAttributeNode(attr)
-		element.classList.add('grocery-item')
-		element.innerHTML = `<p class="title">${value}</p>
-            <div class="btn-container">
-              <!-- edit btn -->
-              <button type="button" class="edit-btn">
-                <i class="fas fa-edit"></i>
-              </button>
-              <!-- delete btn -->
-              <button type="button" class="delete-btn">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          `
-		// buttons
-		const deleteBtn = element.querySelector('.delete-btn')
-		const editBtn = element.querySelector('.edit-btn')
-		deleteBtn.addEventListener('click', deleteItems)
-		editBtn.addEventListener('click', editItems)
-		// apend child
-		list.appendChild(element)
+		creatListItem(id, value)
 		// show container
 		container.classList.add('show-container')
 		// set back to default
@@ -176,3 +154,42 @@ function getLocalStorage() {
 		: []
 }
 // get local storage
+
+// setUpItems
+function setUpItems() {
+	let items = getLocalStorage()
+	if (items.length > 0) {
+		items.forEach(item => {
+			creatListItem(item.id, item.value)
+		})
+		container.classList.add('show-container')
+	}
+}
+// setUpItems
+
+function creatListItem(id, value) {
+	const element = document.createElement('arcticle')
+	const attr = document.createAttribute('data-id')
+	attr.value = id
+	element.setAttributeNode(attr)
+	element.classList.add('grocery-item')
+	element.innerHTML = `<p class="title">${value}</p>
+            <div class="btn-container">
+              <!-- edit btn -->
+              <button type="button" class="edit-btn">
+                <i class="fas fa-edit"></i>
+              </button>
+              <!-- delete btn -->
+              <button type="button" class="delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `
+	// buttons
+	const deleteBtn = element.querySelector('.delete-btn')
+	const editBtn = element.querySelector('.edit-btn')
+	deleteBtn.addEventListener('click', deleteItems)
+	editBtn.addEventListener('click', editItems)
+	// apend child
+	list.appendChild(element)
+}
