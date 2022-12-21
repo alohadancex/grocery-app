@@ -18,11 +18,10 @@ clearBtn.addEventListener('click', clearItems)
 // add item
 function addItem(e) {
 	e.preventDefault()
-
-	const value = grocery.value.trim()
+	const value = grocery.value
 	const id = new Date().getTime().toString()
 
-	if (value !== '' && !editFlag) {
+	if (value && !editFlag) {
 		const element = document.createElement('arcticle')
 		const attr = document.createAttribute('data-id')
 		attr.value = id
@@ -49,20 +48,21 @@ function addItem(e) {
 		list.appendChild(element)
 		// show container
 		container.classList.add('show-container')
-		// display success
-		displayAlert('added on list', 'success')
-		// addToLocalStorage
-		addToLocalStorage(id, value)
-		// setBackToDefaul
+		// set back to default
 		setBackToDefault()
+		// display alert
+		displayAlert('item added in your list', 'success')
+		// add to local storage
+		addToLocalStorage(id, value)
 	} else if (value && editFlag) {
 		editElement.innerHTML = value
 		displayAlert('value changed', 'success')
-		// edit local storage
-		editToLocalStorage(editId, value)
+
+		// edit  local storage
+		editLocalStorage(editId, value)
 		setBackToDefault()
 	} else {
-		displayAlert('please enter the value', 'danger')
+		displayAlert('please add your item in list', 'danger')
 	}
 }
 // add item
@@ -72,7 +72,6 @@ function displayAlert(text, action) {
 	alert.classList.add(`alert-${action}`)
 	alert.textContent = text
 
-	// remove alert
 	setTimeout(() => {
 		alert.classList.remove(`alert-${action}`)
 		alert.textContent = ''
@@ -84,14 +83,14 @@ function displayAlert(text, action) {
 function clearItems() {
 	const items = document.querySelectorAll('.grocery-item')
 	if (items.length > 0) {
-		items.forEach(function (item) {
+		items.forEach(item => {
 			list.removeChild(item)
+			displayAlert('items removed from your list', 'danger')
 		})
+		container.classList.remove('show-container')
+		setBackToDefault()
+		localStorage.removeItem('list')
 	}
-	container.classList.remove('show-container')
-	displayAlert('empty list', 'danger')
-	setBackToDefault()
-	localStorage.removeItem('list')
 }
 // clear items
 
@@ -105,8 +104,7 @@ function deleteItems(e) {
 		container.classList.remove('show-container')
 		setBackToDefault()
 	}
-	displayAlert('item removed from list', 'danger')
-	// remove from local storage
+	displayAlert('item removed from your list', 'danger')
 	removeFromLocalStorage(id)
 }
 // delete function
@@ -114,9 +112,8 @@ function deleteItems(e) {
 // edit function
 function editItems(e) {
 	const element = e.currentTarget.parentElement.parentElement
-	// set edit item
+
 	editElement = e.currentTarget.parentElement.previousElementSibling
-	//set form value
 	grocery.value = editElement.innerHTML
 	editFlag = true
 	editId = element.dataset.id
@@ -139,7 +136,6 @@ function addToLocalStorage(id, value) {
 		id: id,
 		value: value,
 	}
-
 	let items = getLocalStorage()
 	items.push(grocery)
 	localStorage.setItem('list', JSON.stringify(items))
@@ -160,7 +156,17 @@ function removeFromLocalStorage(id) {
 // remove from local storage
 
 // edit to local storage
-function editToLocalStorage(id, value) {}
+function editLocalStorage(id, value) {
+	let items = getLocalStorage()
+
+	items = items.map(function (item) {
+		if (item.id === id) {
+			item.value = value
+		}
+		return item
+	})
+	localStorage.setItem('list', JSON.stringify(items))
+}
 // edit to local storage
 
 // get local storage
